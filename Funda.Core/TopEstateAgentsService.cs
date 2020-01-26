@@ -10,6 +10,7 @@ namespace Funda.Core
     public class TopEstateAgentsService: ITopEstateAgentsService
     {
         private const string UriSeparator = "/";
+        private const int IterationsExternalServerLimit = 100;
 
         public string GetUriString(bool? withGarden)
         {
@@ -74,6 +75,9 @@ namespace Funda.Core
                     }
 
                     iteration++;
+                    //Let's delay our iterations with 60 seconds when wereach limit per minute 
+                    if (iteration%IterationsExternalServerLimit==0)
+                        await Task.Delay(60000);
                 }
                 while (areAnyEstateObjects);
 
