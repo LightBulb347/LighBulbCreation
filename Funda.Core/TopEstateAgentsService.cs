@@ -10,7 +10,6 @@ namespace Funda.Core
     public class TopEstateAgentsService: ITopEstateAgentsService
     {
         private const string UriSeparator = "/";
-        private const int IterationsExternalServerLimit = 100;
 
         public string GetUriString(bool? withGarden)
         {
@@ -55,8 +54,15 @@ namespace Funda.Core
                     var uriStringIteration = string.Format(uriString, iteration.ToString());
                     var response = await client.GetAsync(uriStringIteration).ConfigureAwait(false);
 
-                    if (!response.IsSuccessStatusCode && response.ReasonPhrase.Equals(ConfigurationConstants.RequestLimitExceededError, StringComparison.InvariantCultureIgnoreCase))
+                    if (DidExternalServerEsxceededLimit(response))
+                    {
+                        //Let's delay our iterations with 60 seconds when we reach limit per minute 
+                        await Task.Delay(60000);
+                        response = await client.GetAsync(uriStringIteration).ConfigureAwait(false);
+                        if (DidExternalServerEsxceededLimit(response))
                             throw new RequestLimitExceededException($"{ConfigurationConstants.RequestLimitExceededError}. Try again in 1 minute.");
+                    }
+                        
 
                     var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseBodyAsJson = JObject.Parse(responseBody);
@@ -75,15 +81,17 @@ namespace Funda.Core
                     }
 
                     iteration++;
-                    //Let's delay our iterations with 60 seconds when wereach limit per minute 
-                    if (iteration%IterationsExternalServerLimit==0)
-                        await Task.Delay(60000);
+                        
                 }
                 while (areAnyEstateObjects);
 
             }
             return estateElements;
         }
+
+        private static bool DidExternalServerEsxceededLimit(HttpResponseMessage response) =>
+             !response.IsSuccessStatusCode && response.ReasonPhrase.Equals(ConfigurationConstants.RequestLimitExceededError, StringComparison.InvariantCultureIgnoreCase);
+        
 
         public async Task<IEnumerable<EstateAgentElement>> GetTopTenEstateAgentElements(bool? withGarden)
         {

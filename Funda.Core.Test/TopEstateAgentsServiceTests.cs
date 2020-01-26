@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Funda.Core.Test
 {
@@ -110,15 +111,10 @@ namespace Funda.Core.Test
         }
 
         [Test]
-        [Ignore("For local testing only - running this test will exhaust external resources.")]
-        public void GetEstateElementsRequestLimitExceededTest()
+        public async Task GetEstateElementsAsyncTast()
         {
-            Assert.Throws<RequestLimitExceededException>(() => {           
-                topEstateAgentsService.GetEstateElementsAsync(false).GetAwaiter().GetResult();
-                topEstateAgentsService.GetEstateElementsAsync(false).GetAwaiter().GetResult();
-                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
-                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
-            });
+            var resultWithGarden = await topEstateAgentsService.GetTopTenEstateAgentElements(true);
+            Assert.IsTrue(resultWithGarden.Any());
         }
     }
 }
