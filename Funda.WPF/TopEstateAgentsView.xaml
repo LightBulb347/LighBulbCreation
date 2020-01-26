@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModel="clr-namespace:Funda.ViewModel;assembly=Funda.ViewModel">
+
+    <DataTemplate DataType="{x:Type viewModel:TopEstateAgentsViewModel}">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Garden:" Margin="0,0,2,0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding HasGarden}" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                <Button Grid.Column="2" Command="{Binding GetTopTenCommand}" Content="Get top 10 estate Agents" Width="Auto" Height="20" VerticalAlignment="Center"/>
+            </Grid>
+            <StackPanel Orientation="Vertical" Grid.Row="1">
+                <TextBlock Grid.Column="0" Text="{Binding ErrorText}" Margin="0,0,2,0" VerticalAlignment="Center" />
+            </StackPanel>
+            
+        </Grid>
+    </DataTemplate>
+    
+</ResourceDictionary>
