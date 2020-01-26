@@ -21,6 +21,16 @@
             </Grid>
             <StackPanel Orientation="Vertical" Grid.Row="1">
                 <TextBlock Grid.Column="0" Text="{Binding ErrorText}" Margin="0,0,2,0" VerticalAlignment="Center" />
+
+                <ItemsControl ItemsSource="{Binding TopTenEstateAgents}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    
+                </ItemsControl>
+                
             </StackPanel>
             
         </Grid>

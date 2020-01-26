@@ -20,19 +20,18 @@ namespace Funda.ViewModel
         public TopEstateAgentsViewModel()
         {
             topEstateAgentsService = new TopEstateAgentsService();
-            GetTopTenCommand = new DelegateCommand(GetTopTenCommandAction, ()=>canExecuteCommand);
+            GetTopTenCommand = new DelegateCommand(GetTopTenCommandAction);
             TopTenEstateAgents = new ObservableCollection<string>();
-            canExecuteCommand = true;
+            HasGarden = true;
         }
 
-        private bool canExecuteCommand;
-        private async Task GetTopTenCommandAction()
+        private void GetTopTenCommandAction()
         {
-            canExecuteCommand = false;
             TopTenEstateAgents.Clear();
             try
             {
-                var topTenEstateAgents = await topEstateAgentsService.GetTopTenEstateAgentElements(HasGarden);
+                //In future we want to make this one awaited and UI responsive
+                var topTenEstateAgents = topEstateAgentsService.GetTopTenEstateAgentElements(HasGarden).GetAwaiter().GetResult();
                 foreach (var topTenEstateAgent in topTenEstateAgents)
                     TopTenEstateAgents.Add(topTenEstateAgent.ToString());
             }
@@ -42,15 +41,10 @@ namespace Funda.ViewModel
             }
             catch (Exception)
             {
-                ErrorText = "Somehting went wrong";
+                ErrorText = "Something went wrong";
             }
 
             PropertyChanged(this, new PropertyChangedEventArgs(nameof(ErrorText)));
-            canExecuteCommand = true;
         }
-
-
-
-
     }
 }

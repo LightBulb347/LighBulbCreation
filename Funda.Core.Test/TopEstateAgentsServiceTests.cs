@@ -110,13 +110,14 @@ namespace Funda.Core.Test
         }
 
         [Test]
+        [Ignore("For local testing only - running this test will exhaust external resources.")]
         public void GetEstateElementsRequestLimitExceededTest()
         {
-            Assert.Throws<RequestLimitExceededException>(() => {
-                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
-                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
+            Assert.Throws<RequestLimitExceededException>(() => {           
                 topEstateAgentsService.GetEstateElementsAsync(false).GetAwaiter().GetResult();
                 topEstateAgentsService.GetEstateElementsAsync(false).GetAwaiter().GetResult();
+                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
+                topEstateAgentsService.GetEstateElementsAsync(true).GetAwaiter().GetResult();
             });
         }
     }

@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Funda.Core/bin
+/Funda.Core/obj
+/Funda.Core.Test/bin
+/Funda.Core.Test/obj/Debug/netcoreapp3.1
+/Funda.Core.Test/obj/Release/netcoreapp3.1
+/Funda.Core.Test/obj
+/Funda.ViewModel/bin
+/Funda.ViewModel/obj
+/Funda.WPF/bin/Debug/netcoreapp3.1
+/Funda.WPF/bin/Release/netcoreapp3.1
+/Funda.WPF/obj
+/Funda.WPF/Funda.WPF.csproj.user
+/.vs/Funda/v16

@@ -4,32 +4,25 @@ using System.Windows.Input;
 
 namespace Funda.ViewModel
 {
-    public class DelegateCommand : IAsyncCommand
+    public class DelegateCommand : ICommand
     {
-        private Func<Task> executeAction;
-        private Func<bool> canExecute;
+        private Action executeAction;
 
-        public DelegateCommand(Func<Task> executeAction, Func<bool> canExecute)
+        public DelegateCommand(Action executeAction)
         {
             this.executeAction = executeAction;
-            this.canExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {
-            return canExecute.Invoke();
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            ExecuteAsync().GetAwaiter().GetResult();
-        }
-
-        public async Task ExecuteAsync()
-        {
-            await executeAction();         
+            executeAction.Invoke();
         }
     }
 }

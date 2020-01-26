@@ -52,12 +52,12 @@ namespace Funda.Core
                 do
                 {
                     var uriStringIteration = string.Format(uriString, iteration.ToString());
-                    var response = await client.GetAsync(uriStringIteration);
+                    var response = await client.GetAsync(uriStringIteration).ConfigureAwait(false);
 
                     if (!response.IsSuccessStatusCode && response.ReasonPhrase.Equals(ConfigurationConstants.RequestLimitExceededError, StringComparison.InvariantCultureIgnoreCase))
-                            throw new RequestLimitExceededException(ConfigurationConstants.RequestLimitExceededError);
+                            throw new RequestLimitExceededException($"{ConfigurationConstants.RequestLimitExceededError}. Try again in 1 minute.");
 
-                    var responseBody = await response.Content.ReadAsStringAsync();
+                    var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseBodyAsJson = JObject.Parse(responseBody);
                     var responseEstateObjects = responseBodyAsJson.GetValue(ConfigurationConstants.EstateObjects);
                     areAnyEstateObjects = responseEstateObjects.Type == JTokenType.Array && responseEstateObjects.HasValues;
@@ -83,7 +83,7 @@ namespace Funda.Core
 
         public async Task<IEnumerable<EstateAgentElement>> GetTopTenEstateAgentElements(bool? withGarden)
         {
-            var estateElements = await GetEstateElementsAsync(withGarden);
+            var estateElements = await GetEstateElementsAsync(withGarden).ConfigureAwait(false);
             var estateAgents = GetEstateAgentElements(estateElements);
             var orderedEstateAgents = GetOrderedEstateAgentElements(estateAgents);
             var topEstateAgents = GetTopEstateAgentElements(orderedEstateAgents, 10);
